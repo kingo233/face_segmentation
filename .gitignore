@@ -8,3 +8,6 @@ build
 ./data/*.prototxt
 *.caffemodel
 *.prototxt
+output/
+data/
+input

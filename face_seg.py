@@ -4,7 +4,7 @@ import numpy as np
 from PIL import Image
 import surgery
 from pathlib import Path
-
+import cv2
 
 import caffe
 
@@ -29,8 +29,9 @@ def segment(image_path):
     # save result to .npy file
     # file_name, file_ext = os.path.splitext(input.split("/"))
     file_name = Path(image_path).stem
-    output_file_path = os.path.join(args.output, file_name + '.npy')
-    np.save(output_file_path, out)
+    output_file_path = os.path.join(args.output, file_name + '.jpg')
+    # np.save(output_file_path, out)
+    cv2.imwrite(output_file_path, out)
     print "Done!" , output_file_path
 
 
@@ -43,8 +44,8 @@ if __name__ == '__main__':
     print "Process started"
 
     # if you want to run on gpu, uncomment these 2 lines:
-    # caffe.set_device(0)
-    # caffe.set_mode_gpu()
+    caffe.set_device(0)
+    caffe.set_mode_gpu()
 
     # load net
     net = caffe.Net('data/face_seg_fcn8s_deploy.prototxt', 'data/face_seg_fcn8s.caffemodel', caffe.TEST)
