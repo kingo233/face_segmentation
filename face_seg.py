@@ -28,8 +28,7 @@ def segment(image_path):
 
     # save result to .npy file
     # file_name, file_ext = os.path.splitext(input.split("/"))
-    file_name = Path(image_path).stem
-    output_file_path = os.path.join(args.output, file_name + '.jpg')
+    output_file_path = image_path.replace(args.input,args.output)
     # np.save(output_file_path, out)
     cv2.imwrite(output_file_path, out)
     print "Done!" , output_file_path
@@ -54,9 +53,11 @@ if __name__ == '__main__':
         segment(args.input)
 
     elif os.path.isdir(args.input):
-        for name in os.listdir(args.input):
-            image_path = os.path.join(args.input, name)
-            if os.path.isfile(image_path):
-                segment(image_path)
+        for root,dirs,files in os.walk(args.input):
+            for dirname in dirs:
+                if not os.path.exists(os.path.join(args.output,dirname)):
+                    os.makedirs(os.path.join(args.output,dirname))
+            for eachfile in files:
+                segment(os.path.join(root,eachfile))
 
     print "Process finished"
